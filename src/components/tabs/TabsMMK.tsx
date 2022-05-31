@@ -4,6 +4,7 @@ import { AppBar, Box, Tab, Tabs, Typography } from '@material-ui/core';
 import { MMKModel } from '../../library/queueing/formulas/MMK.model';
 import ResultItem from '../results/ResultItem';
 import CostTab from '../cost/CostTab';
+import MathJax from 'react-mathjax';
 
 interface TabsMMKProps {
   result: MMKModel;
@@ -34,8 +35,8 @@ const TabsMMK = ({ result, labelPn }: TabsMMKProps) => {
       </AppBar>
       <TabPanel value={value} index={0}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">
+        <MathJax.Provider>
             <ResultItem
-              formula="P_{0}=1-\tfrac{\lambda}{\mu}"
               symbol="P0"
               label="Probabilidad de hallar el sistema vacío"
               value={result?.p0.toFixed(5)}
@@ -85,7 +86,7 @@ const TabsMMK = ({ result, labelPn }: TabsMMKProps) => {
               symbol="Wn"
               label="El tiempo esperado en la cola para colas no vacías por los clientes"
               value={result?.wn.toFixed(5)}
-            />
+            /></MathJax.Provider>
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>

@@ -5,11 +5,9 @@ const Math = ({ formula }) => {
     \\hat f(\\xi)\\,e^{2 \\pi i \\xi x}
     \\,d\\xi`;
   return (
-    <MathJax.Provider>
-      <div>
-        <MathJax.Node formula={formula ? formula : tex} />
-      </div>
-    </MathJax.Provider>
+    <div>
+      <MathJax.Node formula={formula ? formula : tex} />
+    </div>
   );
 };
 

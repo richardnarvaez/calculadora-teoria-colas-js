@@ -21,6 +21,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
+import Toolbar from '../components/toolbar/main.toolbar';
+import Wait from '../components/wait';
 
 type MMKValues = {
   lambda: number;
@@ -209,8 +211,7 @@ const MMK = () => {
   
   return (
     <div className="flex justify-center h-full lg:items-center" style={{margin:24}}>
-      <div className="flex flex-col rounded-xl w-full shadow-md overflow-hidden sm:w-11/12 lg:flex-row lg:w-11/12">
-        
+      <div className="m-8">
         <div
           className={`w-full lg:min-h-full flex justify-center border 
           ${!showResult.show ? 'bg-gray-200' : 'bg-white'}`}
@@ -218,9 +219,7 @@ const MMK = () => {
           {showResult.loading ? (
             <p className="self-center my-36">Calculando resultados...</p>
           ) : !showResult.show ? (
-            <p className="self-center my-36">
-              Presiona Calcular para ver los resultados
-            </p>
+            <Wait/>
           ) : (
             <div className='w-full'>
               {/* <div className="relative flex my-3 justify-center items-center">
@@ -237,22 +236,8 @@ const MMK = () => {
           )}
         </div>
         
-        <div className="bg-white  border w-full">
-          <div className="relative flex justify-center items-center h-12 px-4">
-            <Link
-              to="/"
-              className="absolute left-0 hover:bg-gray-200 rounded-full p-2"
-              title="back"
-            >
-              <svg className="w-6 h-6" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                />
-              </svg>
-            </Link>
-            <h2 className="font-bold text-xl">M/M/k</h2>
-          </div>
+        <div className="bg-white  border w-full mt-8">
+        <Toolbar title="M/M/k" description="PICM - Poblacion Ininita Canal Multiple"/>
 
           <form onSubmit={handleSubmit(onSubmit)} className="p-6">
             <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-8">

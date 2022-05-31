@@ -10,6 +10,9 @@ import OptionInput, {
 } from '../components/inputs/OptionInput';
 import { SystemOrQueuing, TypeCalculate } from '../library/queueing/Constants';
 import { MM1MMModel } from '../library/queueing/formulas/MM1MM.model';
+import MathJax from 'react-mathjax';
+import Toolbar from '../components/toolbar/main.toolbar';
+import Wait from '../components/wait';
 
 type MM1MMValues = {
   lambda: number;
@@ -71,23 +74,79 @@ const MM1MM = () => {
 
   return (
     <div className="flex justify-center h-full lg:items-center">
-      <div className="flex flex-col rounded-xl w-full shadow-md overflow-hidden sm:w-11/12 lg:flex-row lg:w-11/12">
-        <div className="bg-white px-6 pt-4 border w-full">
-          <div className="relative flex my-3 justify-center items-center">
-            <Link
-              to="/"
-              className="absolute left-0 hover:bg-gray-200 rounded-full p-2"
-              title="back"
-            >
-              <svg className="w-6 h-6" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                />
-              </svg>
-            </Link>
-            <h2 className="font-bold text-2xl">M/M/1/M/M</h2>
-          </div>
+      <div className="m-8">
+         <div
+          className={`w-full lg:min-h-full flex justify-center border px-6 pt-4
+        ${!showResult.show ? 'bg-gray-200' : 'bg-white'}`}
+        >
+          {showResult.loading ? (
+            <p className="self-center my-36">Calculando resultados...</p>
+          ) : !showResult.show ? (
+            <Wait/>
+          ) : (
+            <div>
+              <div className="relative flex my-3 justify-center items-center">
+                <h2 className="font-bold text-2xl">Resultados</h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 ">
+              <MathJax.Provider>
+
+                  <ResultItem
+                    symbol="P0"
+                    label="Probabilidad de hallar el sistema vacío"
+                    value={result?.p0.toFixed(5)}
+                  />
+                  <ResultItem
+                    symbol="Pe"
+                    label="Probabilidad de hallar el sistema ocupado"
+                    value={result?.pe.toFixed(5)}
+                  />
+                  <ResultItem
+                    symbol="Pn"
+                    label={labelPn}
+                    value={result?.pn.toFixed(5)}
+                  />
+                  <ResultItem
+                    symbol="L"
+                    label="El número esperado de clientes en el sistema"
+                    value={result?.l.toFixed(5)}
+                  />
+                  <ResultItem
+                    symbol="Lq"
+                    label="El número esperado de clientes en la cola"
+                    value={result?.lq.toFixed(5)}
+                  />
+               
+                  <ResultItem
+                    symbol="Ln"
+                    label="El número esperado de clientes en la cola no vacía"
+                    value={result?.ln.toFixed(5)}
+                  />
+                  <ResultItem
+                    symbol="Wq"
+                    label="El tiempo esperado en la cola por los clientes"
+                    value={result?.wq.toFixed(5)}
+                  />
+                  <ResultItem
+                    symbol="W"
+                    label="El tiempo promedio esperado en el sistema por los clientes"
+                    value={result?.w.toFixed(5)}
+                  />
+                  <ResultItem
+                    symbol="Wn"
+                    label="El tiempo esperado en la cola para colas no vacías por los clientes"
+                    value={result?.wn.toFixed(5)}
+                  />
+               </MathJax.Provider>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white px-6 pt-4 border w-full mt-8">
+         
+        <Toolbar title="M/M/1/M/M" description="PFCS - Poblacion Finita Canal Simple"/>
+         
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-8">
@@ -185,75 +244,7 @@ const MM1MM = () => {
             </div>
           </form>
         </div>
-        <div
-          className={`w-full lg:min-h-full flex justify-center border px-6 pt-4
-        ${!showResult.show ? 'bg-gray-200' : 'bg-white'}`}
-        >
-          {showResult.loading ? (
-            <p className="self-center my-36">Calculando resultados...</p>
-          ) : !showResult.show ? (
-            <p className="self-center my-36">
-              Presiona Calcular para ver los resultados
-            </p>
-          ) : (
-            <div>
-              <div className="relative flex my-3 justify-center items-center">
-                <h2 className="font-bold text-2xl">Resultados</h2>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 ">
-                <div>
-                  <ResultItem
-                    symbol="P0"
-                    label="Probabilidad de hallar el sistema vacío"
-                    value={result?.p0.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="Pe"
-                    label="Probabilidad de hallar el sistema ocupado"
-                    value={result?.pe.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="Pn"
-                    label={labelPn}
-                    value={result?.pn.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="L"
-                    label="El número esperado de clientes en el sistema"
-                    value={result?.l.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="Lq"
-                    label="El número esperado de clientes en la cola"
-                    value={result?.lq.toFixed(5)}
-                  />
-                </div>
-                <div>
-                  <ResultItem
-                    symbol="Ln"
-                    label="El número esperado de clientes en la cola no vacía"
-                    value={result?.ln.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="Wq"
-                    label="El tiempo esperado en la cola por los clientes"
-                    value={result?.wq.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="W"
-                    label="El tiempo promedio esperado en el sistema por los clientes"
-                    value={result?.w.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="Wn"
-                    label="El tiempo esperado en la cola para colas no vacías por los clientes"
-                    value={result?.wn.toFixed(5)}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+       
       </div>
     </div>
   );

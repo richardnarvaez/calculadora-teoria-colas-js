@@ -7,9 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import MathJax from 'react-mathjax'
 ReactDOM.render(
   <React.StrictMode>
-    {/* <MathJax.Provider> */}
       <App />
-    {/* </MathJax.Provider> */}
   </React.StrictMode>,
   document.getElementById('root'),
 );

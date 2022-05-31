@@ -10,6 +10,9 @@ import OptionInput, {
 } from '../components/inputs/OptionInput';
 import { MM1Model } from '../library/queueing/formulas/MM1.model';
 import { SystemOrQueuing, TypeCalculate } from '../library/queueing/Constants';
+import MathJax from 'react-mathjax';
+import Wait from '../components/wait';
+import Toolbar from '../components/toolbar/main.toolbar';
 
 type MM1Values = {
   lambda: number;
@@ -82,31 +85,25 @@ const MM1 = () => {
           {showResult.loading ? (
             <p className="self-center my-36">Calculando resultados...</p>
           ) : !showResult.show ? (
-            <div className=" m-36 flex flex-col justify-center items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" viewBox='0 0 48 48'><path d="M36 47Q31.4 47 28.2 43.8Q25 40.6 25 36Q25 31.4 28.2 28.2Q31.4 25 36 25Q40.6 25 43.8 28.2Q47 31.4 47 36Q47 40.6 43.8 43.8Q40.6 47 36 47ZM36 44Q39.3 44 41.65 41.65Q44 39.3 44 36Q44 32.7 41.65 30.35Q39.3 28 36 28Q32.7 28 30.35 30.35Q28 32.7 28 36Q28 39.3 30.35 41.65Q32.7 44 36 44ZM12 47Q7.4 47 4.2 43.8Q1 40.6 1 36Q1 31.4 4.2 28.2Q7.4 25 12 25Q16.6 25 19.8 28.2Q23 31.4 23 36Q23 40.6 19.8 43.8Q16.6 47 12 47ZM12 44Q15.3 44 17.65 41.65Q20 39.3 20 36Q20 32.7 17.65 30.35Q15.3 28 12 28Q8.7 28 6.35 30.35Q4 32.7 4 36Q4 39.3 6.35 41.65Q8.7 44 12 44ZM12 23Q7.4 23 4.2 19.8Q1 16.6 1 12Q1 7.4 4.2 4.2Q7.4 1 12 1Q16.6 1 19.8 4.2Q23 7.4 23 12Q23 16.6 19.8 19.8Q16.6 23 12 23ZM12 20Q15.3 20 17.65 17.65Q20 15.3 20 12Q20 8.7 17.65 6.35Q15.3 4 12 4Q8.7 4 6.35 6.35Q4 8.7 4 12Q4 15.3 6.35 17.65Q8.7 20 12 20ZM36 23Q31.4 23 28.2 19.8Q25 16.6 25 12Q25 7.4 28.2 4.2Q31.4 1 36 1Q40.6 1 43.8 4.2Q47 7.4 47 12Q47 16.6 43.8 19.8Q40.6 23 36 23ZM36 20Q39.3 20 41.65 17.65Q44 15.3 44 12Q44 8.7 41.65 6.35Q39.3 4 36 4Q32.7 4 30.35 6.35Q28 8.7 28 12Q28 15.3 30.35 17.65Q32.7 20 36 20ZM31 40V37H41V40ZM31 35V32H41V35ZM10.5 41V37.5H7V34.5H10.5V31H13.5V34.5H17V37.5H13.5V41ZM7 13.5V10.5H17V13.5ZM33.5 16.6 31.4 14.5 33.9 12 31.4 9.5 33.5 7.4 36 9.9 38.5 7.4 40.6 9.5 38.1 12 40.6 14.5 38.5 16.6 36 14.1Z"/></svg>
-              <span>Introduce los datos para empezar</span>
-            </div>
+            <Wait/>
           ) : (
             <div>
               <div className="relative flex my-3 justify-center items-center">
                 <h2 className="font-bold text-2xl mb-3">RESULTADOS</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-6 ">
-             
+              <MathJax.Provider>
                   <ResultItem
                     symbol="ρ"
-                    formula="\rho=\frac{\lambda}{\mu}"
                     label="Probabilidad de hallar el sistema ocupado"
                     value={result?.ro.toFixed(5)}
                   />
                   <ResultItem
-                  formula="P_{0}=1-\tfrac{\lambda}{\mu}"
                     symbol="P0"
                     label="Probabilidad de hallar el sistema vacío"
                     value={result?.p0.toFixed(5)}
                   />
                   <ResultItem
-                  formula="P_{n}=P_{0}(\tfrac{\lambda}{\mu})_{}^{n}, \sum_{n=0}^{\infty }P_{n}=1"
                     symbol="Pn"
                     label={labelPn}
                     value={result?.pn.toFixed(5)}
@@ -142,30 +139,13 @@ const MM1 = () => {
                     label="El tiempo esperado en la cola para colas no vacías por los clientes"
                     value={result?.wn.toFixed(5)}
                   />
+                  </MathJax.Provider>
               </div>
             </div>
           )}
         </div>
         <div className="bg-white p-2 border w-full mt-4">
-          <div className="relative flex my-3  items-center">
-            <Link
-              to="/"
-              className=" hover:bg-gray-200 rounded-full p-2"
-              title="back"
-            >
-              <svg className="w-6 h-6" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"
-                />
-              </svg>
-            </Link>
-            <div className='ml-3'> 
-              <h1 className="font-bold">M/M/1</h1>
-              <small>PICS - Poblacion Infinita Canal Simple</small>
-            </div>
-           
-          </div>
+          <Toolbar title="M/M/1" description="PICS - Poblacion Infinita Canal Simple"/>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
