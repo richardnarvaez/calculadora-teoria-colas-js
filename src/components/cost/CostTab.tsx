@@ -66,6 +66,44 @@ const CostTab = ({ mmk }: CostMMKProps) => {
     let cs = parseFloat(data.cs.toString());
     const cost = new CostMMK(mmk, time);
     cost.calculateExercise(cs, cts);
+
+    let i = 1;
+    do{
+      const ctCalculated =  cost.getCalculateExercise(cs, cts, i)
+      datapoints[i] = ctCalculated;
+      if(i<cost.mmk.k){
+        data2[i] = NaN;
+      }else if(i===cost.mmk.k){
+        data2[i] = ctCalculated;
+      }
+      i++;
+    }while(i<50)
+
+    setData({
+      labels: labels,
+      datasets: [
+         {
+            label: 'Puntos de la curva',
+            data: datapoints,
+            
+            fill: false,
+            // cubicInterpolationMode: 'monotone',
+            tension: 0.4,
+            pointRadius: 0
+         },
+         {
+            label: 'Costo ACTUAL',
+            data: data2,
+            // borderColor: Utils.CHART_COLORS.red,
+            fill: false,
+            borderColor: '#f87979',
+            // cubicInterpolationMode: 'monotone',
+            tension: 0.4,
+            pointRadius: 10
+         },
+      ],
+    })
+
     setCost(cost);
     console.log("COST: ", cost)
     setShowResult(true);

@@ -28,6 +28,11 @@ export class CostMMK {
     this.ctExercise = (this.mmk.lambda * this.time * cts * this.mmk.w) + (this.mmk.k * cs);
   }
 
+  getCalculateExercise(cs: number, cts: number, k: number) {
+    // this.ctExercise = (this.mmk.lambda * this.time * cts * this.mmk.w) + (this.mmk.k * cs * this.time);
+    return (this.mmk.lambda * this.time * cts * this.mmk.w) + (k * cs);
+  }
+
   /**
    * 
    * @param cte  Costo unitario por tiempo en cola (Tiempo de espera de los clientes)
