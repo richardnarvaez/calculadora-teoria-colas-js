@@ -13,7 +13,6 @@ const Home = () => {
         <img className='w-64' alt='logo' src='https://www.espoch.edu.ec/images/Comunicacion/2021/MARZO%202021/Actualizaci%C3%B3n/M.png'/>
       </div>
       <h1 className='mb-8 '><b>CALCULADORA</b> de Teoria de Colas</h1>
-      <Math formula="formula"/>
       <HomeMenu />
     </div>
   );

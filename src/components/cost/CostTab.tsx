@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import MathJax from 'react-mathjax';
 import { CostMMK } from '../../library/queueing/cost/CostMMK';
 import { MMKModel } from '../../library/queueing/formulas/MMK.model';
 import Button, { ButtonType } from '../buttons/Button';
 
 import Input, { InputTypes } from '../inputs/Input';
 import ResultItem from '../results/ResultItem';
+import { Line } from 'react-chartjs-2'
 
 interface CostMMKProps {
   mmk: MMKModel;
@@ -20,6 +22,35 @@ type CostMMKValues = {
 const CostTab = ({ mmk }: CostMMKProps) => {
   const [showResult, setShowResult] = useState(false);
   const [cost, setCost] = useState<CostMMK>();
+
+  const labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
+  let data2 = [NaN]
+  let datapoints = [NaN]
+  
+  const [data, setData] = useState({
+    labels: labels,
+    datasets: [
+       {
+          label: 'Puntos de la curva',
+          data: datapoints,
+          
+          fill: false,
+          // cubicInterpolationMode: 'monotone',
+          tension: 0.4,
+          pointRadius: 0
+       },
+       {
+          label: 'Costo ACTUAL',
+          data: data2,
+          // borderColor: Utils.CHART_COLORS.red,
+          fill: false,
+          borderColor: '#f87979',
+          // cubicInterpolationMode: 'monotone',
+          tension: 0.4,
+          pointRadius: 10
+       },
+    ],
+ })
 
   const {
     register,
@@ -36,6 +67,7 @@ const CostTab = ({ mmk }: CostMMKProps) => {
     const cost = new CostMMK(mmk, time);
     cost.calculateExercise(cs, cts);
     setCost(cost);
+    console.log("COST: ", cost)
     setShowResult(true);
   };
 
@@ -43,7 +75,7 @@ const CostTab = ({ mmk }: CostMMKProps) => {
     <div className="flex flex-col">
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Input
-          symbol="H"
+          symbol="T"
           label="horas día laborable"
           name="time"
           placeholder="0"
@@ -82,12 +114,18 @@ const CostTab = ({ mmk }: CostMMKProps) => {
         </div>
       </form>
       <div>
-        {showResult ? (
+        {showResult ? (<>
+          <MathJax.Provider>
           <ResultItem
-            label="Costo total del sistema"
+            type='PICM'
+            label="Costo total DIARIO del sistema"
             symbol="CT"
             value={cost?.ctExercise.toFixed(5)}
-          />
+          /></MathJax.Provider>
+          <div style={{textAlign: "center"}} className="border p-2 col-span-2 mt-3">
+          <p className="ml-2 self-end"><b>CT respecto a k</b></p>
+            <Line data={data}/>
+          </div></>
         ) : (
           <div className="flex justify-center items-center p-12 rounded-sm bg-gray-200">
             Presiona Calcular Costos para ver los resultados

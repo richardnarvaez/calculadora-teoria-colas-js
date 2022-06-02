@@ -20,7 +20,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import { Line } from 'react-chartjs-2'
+
 import Toolbar from '../components/toolbar/main.toolbar';
 import Wait from '../components/wait';
 
@@ -52,10 +52,10 @@ const MMK = () => {
   const [showResult, setShowResult] = useState({ loading: false, show: false });
   const [result, setResult] = useState<MMKModel>(new MMKModel(0,0,0));
   const [labelPn, setLabelPn] = useState<string>('');
-  const labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99];
-
+  
+  const labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
   let data2 = [NaN]
-  let datapoints = [0]
+  let datapoints = [NaN]
 
   
   const [data, setData] = useState({
@@ -131,9 +131,10 @@ const MMK = () => {
     let k = parseInt(data.k.toString());
     let n = parseInt(data.n.toString());
     data2 = [NaN]
-    datapoints = [0]
+    datapoints = [NaN]
 
-    if(k <=1){
+    console.log(k)
+    if(isNaN(k) || k <=1){
       // Se calcula hasta k=99  
       let condition = 99;
       let i = 1;
@@ -155,7 +156,7 @@ const MMK = () => {
         }
         i++;
         console.log("condition: c<1", condition, "en i:", i, "cuando k:", k);
-      }while(i < 99)
+      }while(i < 50)
       setData({
         labels: labels,
         datasets: [
@@ -222,16 +223,7 @@ const MMK = () => {
             <Wait/>
           ) : (
             <div className='w-full'>
-              {/* <div className="relative flex my-3 justify-center items-center">
-                <h2 className="font-bold text-2xl">Resultados</h2>
-              </div> */}
-            
-              <TabsMMK result={result} labelPn={labelPn} />
-              <p>CONDICION DE ESTABILIDAD {'a/(k*u)<1'} </p>
-              <div style={{width: 400, height: 200, margin: 12}}>
-                <Line data={data}  options={config}/>
-              </div>
-              
+              <TabsMMK result={result} labelPn={labelPn} data={data}/>
             </div>
           )}
         </div>
@@ -275,14 +267,14 @@ const MMK = () => {
                 register={register}
                 error={errors.k}
                 container="mt-2"
-                required={{
-                  required: 'El campo es obligatorio',
-                  min: {
-                    value: 0,
-                    message: 'Debe tener mínimo 0',
-                    // message: 'Debe tener mínimo 2 servidores para ser M/M/K',
-                  },
-                }}
+                // required={{
+                //   required: 'El campo es obligatorio',
+                //   min: {
+                //     value: 0,
+                //     message: 'Debe tener mínimo 0',
+                //     // message: 'Debe tener mínimo 2 servidores para ser M/M/K',
+                //   },
+                // }}
               />
               <Input
                 symbol="N"

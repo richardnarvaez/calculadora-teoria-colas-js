@@ -5,13 +5,15 @@ import { MMKModel } from '../../library/queueing/formulas/MMK.model';
 import ResultItem from '../results/ResultItem';
 import CostTab from '../cost/CostTab';
 import MathJax from 'react-mathjax';
+import { Line } from 'react-chartjs-2';
 
 interface TabsMMKProps {
   result: MMKModel;
   labelPn: string;
+  data: any;
 }
 
-const TabsMMK = ({ result, labelPn }: TabsMMKProps) => {
+const TabsMMK = ({ result, labelPn, data }: TabsMMKProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -38,55 +40,71 @@ const TabsMMK = ({ result, labelPn }: TabsMMKProps) => {
         <MathJax.Provider>
             <ResultItem
               symbol="P0"
+              type="PICM"
               label="Probabilidad de hallar el sistema vacío"
               value={result?.p0.toFixed(5)}
             />
             <ResultItem
               symbol="Pk"
+              type="PICM"
               label="La probabilidad de que un usuario que llega tenga que esperar (k o más)"
               value={result?.pk.toFixed(5)}
             />
             <ResultItem
               symbol="Pne"
+              type="PICM"
               label="Probabilidad de que un usuario que llega no tenga que esperar"
               value={result?.pne.toFixed(5)}
             />
             <ResultItem
               symbol="Pn"
+               type="PICM"
               label={labelPn}
               value={result?.pn.toFixed(5)}
             />
             <ResultItem
               symbol="L"
+              type="PICM"
               label="El número esperado de clientes en el sistema"
               value={result?.l.toFixed(5)}
             />
           
             <ResultItem
               symbol="Lq"
+              type="PICM"
               label="El número esperado de clientes en la cola"
               value={result?.lq.toFixed(5)}
             />
             <ResultItem
               symbol="Ln"
+              type="PICM"
               label="El número esperado de clientes en la cola no vacía"
               value={result?.ln.toFixed(5)}
             />
             <ResultItem
               symbol="W"
+              type="PICM"
               label="El tiempo promedio esperado en el sistema por los clientes"
               value={result?.w.toFixed(5)}
             />
             <ResultItem
               symbol="Wq"
+               type="PICM"
               label="El tiempo esperado en la cola por los clientes"
               value={result?.wq.toFixed(5)}
             />
             <ResultItem
               symbol="Wn"
+              type="PICM"
               label="El tiempo esperado en la cola para colas no vacías por los clientes"
               value={result?.wn.toFixed(5)}
-            /></MathJax.Provider>
+            />
+            </MathJax.Provider>
+           
+              <div style={{textAlign: "center"}} className="border p-2 col-span-2">
+              <p className="ml-2 self-end"><b>CONDICION DE ESTABILIDAD</b> {'a/(k*u)<1 = ' + result.k} </p>
+                <Line data={data}/>
+              </div>
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
