@@ -178,6 +178,10 @@ export class MMKModel {
     }
   }
 
+  public getPnn(n: number): number {
+    return this.basicPn(n);
+  }
+
   private calculatePnWhenNLessK(n: number): number {
     // (P0/n!)
     let item1 = Division(this.p0, Factorial(n));

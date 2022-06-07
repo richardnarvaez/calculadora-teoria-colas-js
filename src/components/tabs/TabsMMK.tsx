@@ -12,10 +12,22 @@ interface TabsMMKProps {
   labelPn: string;
   data: any;
 }
-
+let dataPn: any = []
 const TabsMMK = ({ result, labelPn, data }: TabsMMKProps) => {
   const [value, setValue] = React.useState(0);
 
+  React.useEffect(() => {
+    dataPn = []
+    for(let i=0; i<=8; i++){
+    const pn = result.getPnn(i)
+    dataPn[i] = {pn}
+    const sumPn = dataPn.reduce((acc: any, cur: any) => acc + cur.pn, 0)
+    dataPn[i] = {pn, sum: sumPn, prob: 1-sumPn}
+    console.log(dataPn)
+  }
+
+  }, []);
+  
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -65,6 +77,21 @@ const TabsMMK = ({ result, labelPn, data }: TabsMMKProps) => {
                 label={labelPn}
                 value={result?.pn.toFixed(5)}
               />
+              <div className="flex flex-col col-span-1 sm:col-span-2 items-center py-4 px-2 border">
+                    <div className='grid grid-cols-4 gap-2'>
+                    {
+                      dataPn && dataPn.length > 0 && dataPn.map((item: any, index: number) => {
+                        return(<div className={"flex flex-col border p-1 " + (index ===0 ? "bg-gray-100" : "")}>
+                        <small><b>{`P${index}: `}</b>{item.pn.toFixed(6)}</small>
+                        <small>{`SumP${index}: `}{item.sum.toFixed(4)}</small>
+                        <small>{`1-Sum${index}: `}{item.prob.toFixed(4)}</small>
+                      </div>)
+                        
+                      })
+                    }</div>
+                    
+                    <p className="text-center text-xs mt-2">Calculo Pn en los casos {'n>=0'} hasta n=8</p>
+                  </div>
               <div style={{textAlign: "center"}} className="border p-2 col-span-1 sm:col-span-2">
             <p ><b>Calculo de W (Tiempo)</b></p>
           </div><ResultItem
