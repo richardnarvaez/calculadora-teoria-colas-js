@@ -23,9 +23,9 @@ export class CostMMK {
    * @param cs  Costo unitario por el servicio (Alquiler, Salario, funcionamiento, etc)
    * @param cts Costo unitario por tiempo en el sistema (Tiempo en el sistema de los clientes)
    */
-  calculateExercise(cs: number, cts: number) {
+  calculateExercise(cs: number, cts: number, k: number) {
     // this.ctExercise = (this.mmk.lambda * this.time * cts * this.mmk.w) + (this.mmk.k * cs * this.time);
-    this.ctExercise = (this.mmk.lambda * this.time * cts * this.mmk.w) + (this.mmk.k * cs);
+    this.ctExercise = (this.mmk.lambda * this.time * cts * this.mmk.w) + (k * cs);
   }
 
   getCalculateExercise(cs: number, cts: number, k: number) {
@@ -43,7 +43,7 @@ export class CostMMK {
   calculateAll(cte: number, cts: number, ctse: number, cs: number) {
     this.ctte = this.calculateCTTE(cte); // Costo diario por el tiempo de espera en cola
     this.ctts = this.calculateCTTS(cts); // Costo diario por el tiempo en el sistema
-    this.cttse = this.calculateCTTSE(ctse); // Costo diario por el tiempo de servicio en el sistema
+    this.calculateCTTSE(ctse); // Costo diario por el tiempo de servicio en el sistema
     this.cts = this.calculateCTS(cs); // Costo diario por el tiempo del servidor
     this.ct = this.calculateCT(); // Costo diario total
   }
@@ -57,7 +57,7 @@ export class CostMMK {
   }
 
   calculateCTTSE(ctse: number) {
-    return this.mmk.lambda * this.time * Division(1, this.mmk.miu) * ctse;
+    this.cttse =  this.mmk.lambda * this.time * Division(1, this.mmk.miu) * ctse;
   }
 
   calculateCTS(cs: number) {

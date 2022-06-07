@@ -12,15 +12,20 @@ interface ResultItemProps {
 const formulasPICS = {
   'P0': 'P_{0}=1-\\tfrac{\\lambda}{\\mu}',
   'Pn': "P_{n}=P_{0}(\\tfrac{\\lambda}{\\mu})_{}^{n}, \\sum_{n=0}^{\\infty }P_{n}=1",
-  'L': 'L=\\sum_{n=0}^{n=M}nP_{n}=M-\\frac{\\mu }{\\lambda}(1-P_{0})',
-  'Lq': 'L_{q}=M-\\frac{\\lambda+\\mu}{\\lambda}(1-P_{0})',
-  'Ln': 'L_{n}=\\frac{L_{q}}{P_{E}}',
-  'W': 'W=W_{q}+\\frac{1}{\\mu}',
-  'Wq': 'W_{q}=\\tfrac{L_{q}}{(M-L)\\lambda}',
-  'Wn': 'W_{n}=\\frac{W_{q}}{P_{E}}',
+  'L': 'L=\\frac{\\lambda}{\\mu-\\lambda}',
+  'Lq': 'L_{q}=\\frac{\\lambda^{2}}{\\mu(\\mu-\\lambda)}',
+  'Ln': 'L_{n}=\\frac{\\lambda}{\\mu-\\lambda}',
+  'W': 'W=\\frac{1}{\\mu-\\lambda}',
+  'Wq': 'W_{q}=\\frac{\\lambda}{\\mu(\\mu-\\lambda)}',
+  'Wn': 'W_{n}=\\frac{1}{\\mu-\\lambda}',
   'Pe': 'P_{E}=\\sum_{n=k}^{M}P_{n}=1-\\sum_{n=0}^{k-1}nP_{n}',
   'Pne': 'P_{NE}=1-P_{E}',
   'ρ': 'ρ=\\frac{\\lambda}{\\mu}',
+  'CTTE': 'CT_{TE}=\\lambda*Time*W_{q}*C_{TE}',
+  'CTTS': 'CT_{TS}=\\lambda*Time*W_{q}*C_{TS}',
+  'CTTSE': 'CT_{TSE}=\\lambda*Time*\\frac{1}{\\mu}*C_{TSE}',
+  'CTS': 'CT_{S}=1*C_{S}',
+  'CT': 'CT(\\frac{$}{dia})=\\lambda*T_{dia.laborable}*W*C_{TS}+1*C_{S}',
 }
 
 const formulasPICM: any = {

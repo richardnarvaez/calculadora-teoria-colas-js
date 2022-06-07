@@ -112,6 +112,10 @@ export class MM1Model {
     return this.p0 * div;
   }
 
+  public getPnn(n:number):number{
+    return this.basicPn(n);
+  }
+
   // The expected number Lq of clients in the queue
   private getLq(): number {
     let numerator = Math.pow(this.lambda, 2);

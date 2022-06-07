@@ -19,7 +19,7 @@ type CostMMKValues = {
   cs: number;
 };
 
-const CostTab = ({ mmk }: CostMMKProps) => {
+const CostTabMM1 = ({ mmk }: any) => {
   const [showResult, setShowResult] = useState(false);
   const [cost, setCost] = useState<CostMMK>();
 
@@ -65,44 +65,12 @@ const CostTab = ({ mmk }: CostMMKProps) => {
     let cts = parseFloat(data.cts.toString());
     let cs = parseFloat(data.cs.toString());
     const cost = new CostMMK(mmk, time);
-    cost.calculateExercise(cs, cts, cost.mmk.k);
-
-    let i = 1;
-    do{
-      const ctCalculated =  cost.getCalculateExercise(cs, cts, i)
-      datapoints[i] = ctCalculated;
-      if(i<cost.mmk.k){
-        data2[i] = NaN;
-      }else if(i===cost.mmk.k){
-        data2[i] = ctCalculated;
-      }
-      i++;
-    }while(i<50)
-
-    setData({
-      labels: labels,
-      datasets: [
-         {
-            label: 'Puntos de la curva',
-            data: datapoints,
-            
-            fill: false,
-            // cubicInterpolationMode: 'monotone',
-            tension: 0.4,
-            pointRadius: 0
-         },
-         {
-            label: 'Costo ACTUAL',
-            data: data2,
-            // borderColor: Utils.CHART_COLORS.red,
-            fill: false,
-            borderColor: '#f87979',
-            // cubicInterpolationMode: 'monotone',
-            tension: 0.4,
-            pointRadius: 10
-         },
-      ],
-    })
+    cost.calculateExercise(cs, cts, 1);
+    cost.calculateCTTE(0.5)
+    cost.calculateCTTS(cts)
+    cost.calculateCTTSE(0.5)
+    cost.calculateCTS(0.5)
+    // cost.calculateCT
 
     setCost(cost);
     console.log("COST: ", cost)
@@ -110,7 +78,7 @@ const CostTab = ({ mmk }: CostMMKProps) => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pb-8">
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Input
           symbol="T"
@@ -152,18 +120,39 @@ const CostTab = ({ mmk }: CostMMKProps) => {
         </div>
       </form>
       <div>
-        {showResult ? (<>
+        {showResult ? (
           <MathJax.Provider>
+            <ResultItem
+            type='PICS'
+            label="Costo Diario por el Tiempo de Espera en la Cola"
+            symbol="CTTE"
+            value={cost?.ctte.toFixed(5)}
+          />
           <ResultItem
-            type='PICM'
-            label="Costo total DIARIO del sistema"
+            type='PICS'
+            label="Costo Diario por el Riempo en el Sistema"
+            symbol="CTTS"
+            value={cost?.ctts.toFixed(5)}
+          />
+          <ResultItem
+            type='PICS'
+            label="Costo total DIARIO por el Tiempo de servicio"
+            symbol="CTTSE"
+            value={cost?.cttse.toFixed(5)}
+          />
+          <ResultItem
+            type='PICS'
+            label="Costo total DIARIO del servicio"
+            symbol="CTS"
+            value={cost?.cts.toFixed(5)}
+          />
+          <ResultItem
+            type='PICS'
+            label={cost?.time === 1 ? "Costo total POR HORA (Tiempo) del sistema": "Costo total DIARIO del sistema"}
+            
             symbol="CT"
             value={cost?.ctExercise.toFixed(5)}
           /></MathJax.Provider>
-          <div style={{textAlign: "center"}} className="border p-2 col-span-2 mt-3">
-          <p className="ml-2 self-end"><b>CT respecto a k</b></p>
-            <Line data={data}/>
-          </div></>
         ) : (
           <div className="flex justify-center items-center p-12 rounded-sm bg-gray-200">
             Presiona Calcular Costos para ver los resultados
@@ -174,4 +163,4 @@ const CostTab = ({ mmk }: CostMMKProps) => {
   );
 };
 
-export default CostTab;
+export default CostTabMM1;

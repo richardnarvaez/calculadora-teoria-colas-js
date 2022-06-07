@@ -13,6 +13,8 @@ import { SystemOrQueuing, TypeCalculate } from '../library/queueing/Constants';
 import MathJax from 'react-mathjax';
 import Wait from '../components/wait';
 import Toolbar from '../components/toolbar/main.toolbar';
+import CostTab from '../components/cost/CostTab';
+import CostTabMM1 from '../components/cost/CostTabMM1';
 
 type MM1Values = {
   lambda: number;
@@ -33,6 +35,7 @@ const LabelTypeCalculate: any = {
   least: 'al menos',
 };
 
+let dataPn :any =  [];
 const MM1 = () => {
   const [showResult, setShowResult] = useState({ loading: false, show: false });
   const [result, setResult] = useState<MM1Model>();
@@ -50,14 +53,24 @@ const MM1 = () => {
     let lambda = parseFloat(data.lambda.toString());
     let miu = parseFloat(data.miu.toString());
     let n = parseInt(data.n.toString());
+    let pnnn = 0
     const model = new MM1Model(lambda, miu, n);
 
     if (model.isStatable()) {
       setShowResult({ loading: true, show: false });
       await model.calculateAll(data.system, data.calculate);
+      for(let i=0; i<=8 ; i++){
+        pnnn = model.getPnn(i)
+        dataPn[i] = {pn: pnnn}
+        const sumPn = dataPn.reduce((a: any, b:any) => a + b.pn, 0)
+        dataPn[i] = {pn: pnnn, sum: sumPn, prob:1-sumPn}
+        console.log("P cuando n = " + i+":", pnnn, dataPn[i])
+      }
+      console.log(dataPn)
       setResult(model);
       setLabel(n, data.calculate, data.system);
       setShowResult({ loading: false, show: true });
+      console.log(model);
     } else {
       alert('no cumple con la condición de estabilidad');
     }
@@ -93,6 +106,9 @@ const MM1 = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-6 ">
               <MathJax.Provider>
+              <div style={{textAlign: "center"}} className="border p-2 col-span-1 sm:col-span-2">
+            <p ><b>Calculo de Pn Probabilidad de Clientes en el sistema</b></p>
+          </div>
                   <ResultItem
                     symbol="ρ"
                     label="Probabilidad de hallar el sistema ocupado"
@@ -108,39 +124,65 @@ const MM1 = () => {
                     label={labelPn}
                     value={result?.pn.toFixed(5)}
                   />
-                  <ResultItem
-                    symbol="Lq"
-                    label="El número esperado de clientes en la cola"
-                    value={result?.lq.toFixed(5)}
-                  />
-                  <ResultItem
-                    symbol="L"
-                    label="El número esperado de clientes en el sistema"
-                    value={result?.l.toFixed(5)}
-                  />
-              
-                  <ResultItem
-                    symbol="Wq"
-                    label="El tiempo esperado en la cola por los clientes"
-                    value={result?.wq.toFixed(5)}
-                  />
-                  <ResultItem
+                  <div className="flex flex-col items-center py-4 px-2 border">
+                    <div className='grid grid-cols-3 gap-2'>
+                    {
+                      dataPn && dataPn.length > 0 && dataPn.map((item: any, index: number) => {
+                        return(<div className={"flex flex-col border p-1 " + (index ===0 ? "bg-gray-100" : "")}>
+                        <small><b>{`P${index}: `}</b>{item.pn}</small>
+                        <small>{`SumP${index}: `}{item.sum}</small>
+                        <small>{`1-Sum${index}: `}{item.prob}</small>
+                      </div>)
+                        
+                      })
+                    }</div>
+                    
+                    <p className="text-center text-xs mt-2">Calculo Pn en los casos {'n>=0'} hasta n=8</p>
+                  </div>
+                  <div style={{textAlign: "center"}} className="border p-2 col-span-1 sm:col-span-2">
+            <p ><b>Tiempo esperado</b></p>
+          </div>
+          <ResultItem
                     symbol="W"
                     label="El tiempo promedio esperado en el sistema por los clientes"
                     value={result?.w.toFixed(5)}
                   />
-                  <ResultItem
-                    symbol="Ln"
-                    label="El número esperado de clientes en la cola no vacía"
-                    value={result?.ln.toFixed(5)}
+          <ResultItem
+                    symbol="Wq"
+                    label="El tiempo esperado en la cola por los clientes"
+                    value={result?.wq.toFixed(5)}
                   />
+                  
                   <ResultItem
                     symbol="Wn"
                     label="El tiempo esperado en la cola para colas no vacías por los clientes"
                     value={result?.wn.toFixed(5)}
                   />
+
+                  
+                  <div style={{textAlign: "center"}} className="border p-2 col-span-1 sm:col-span-2">
+            <p ><b>Numero de Clientes</b></p>
+          </div>
+                  <ResultItem
+                    symbol="L"
+                    label="El número esperado de clientes en el sistema"
+                    value={result?.l.toFixed(5)}
+                  />
+              <ResultItem
+                    symbol="Lq"
+                    label="El número esperado de clientes en la cola"
+                    value={result?.lq.toFixed(5)}
+                  />
+                 
+                  <ResultItem
+                    symbol="Ln"
+                    label="El número esperado de clientes en la cola no vacía"
+                    value={result?.ln.toFixed(5)}
+                  />
+                  
                   </MathJax.Provider>
               </div>
+              <CostTabMM1 mmk={result} />
             </div>
           )}
         </div>
