@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import Toolbar from '../components/navigation/Toolbar';
 import MainStack from '../routes/MainStack';
 import './App.css';
 
