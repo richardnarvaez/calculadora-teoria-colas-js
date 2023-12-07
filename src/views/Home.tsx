@@ -14,7 +14,7 @@ const Home = () => {
       <h1 className='font-bold'>Calculadora de Teoria de Colas</h1>
       <h2 className='mb-8 '>Queueing Theory Calculator</h2>
       <HomeMenu />
-      <a className='mt-8' href='https://github.com/richardnarvaez/calculadora-teoria-colas-js'>Open Source | Richard Vinueza 2022</a>
+      <a className='mt-8 text-sm bg-gray-100 rounded-full py-2 px-4 border' href='https://github.com/richardnarvaez/calculadora-teoria-colas-js'>Open Source | Richard Vinueza 2022</a>
     </div>
   );
 };
