@@ -11,8 +11,10 @@ const Home = () => {
       <div className='w-24 h-24 rounded-3xl overflow-hidden bg-gray-500 mb-8'>
         <img className='w-64' alt='logo' src='/img/espoch_logo.jpg'/>
       </div>
-      <h1 className='mb-8 '><b>CALCULADORA</b> de Teoria de Colas</h1>
+      <h1 className='font-bold'>Calculadora de Teoria de Colas</h1>
+      <h2 className='mb-8 '>Queueing Theory Calculator</h2>
       <HomeMenu />
+      <a className='mt-8' href='https://github.com/richardnarvaez/calculadora-teoria-colas-js'>Open Source | Richard Vinueza 2022</a>
     </div>
   );
 };
